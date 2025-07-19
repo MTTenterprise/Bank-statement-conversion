@@ -36,10 +36,8 @@ Whether you're processing statements for bookkeeping, importing into QuickBooks,
 |------|-------|
 | Backend | Laravel 11 (PHP 8.2) |
 | Frontend | Inertia.js + React |
-| OCR Engine | Doctr (PDFBox) / Tesseract |
-| File Queue | Redis + Laravel Queues |
 | Storage | Local & S3-compatible |
-| Docs | OpenAPI (Swagger UI) |
+| Docs | (Swagger UI) |
 
 ---
 
