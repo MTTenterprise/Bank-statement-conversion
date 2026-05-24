@@ -1,60 +1,112 @@
-# Bank-statement-conversion
-Convert PDF bank statements into CSV, Excel, QBO &amp; OFX - no login required, API-ready.
-# 🧾 Bank Statement Conversion
+# Bank Statement Conversion Agent Skill
 
-**Convert PDF bank statements to CSV, Excel, QBO, and OFX — instantly.**  
-Scanned or digital, our tool works with all formats.  
-Built for accountants, bookkeepers, fintech apps, and automation workflows.
+Public agent integration assets for [Bank Statement Conversion](https://bank-statement-conversion.com).
 
-➡️ Try it live: [bank-statement-conversion.com](https://bank-statement-conversion.com)  
-🛠️ Self-host or use our API for full automation.  
-✅ No login required to test — first conversion is free.
+This repository publishes the `bank-statement-conversion` Agent Skill so AI coding agents and agent clients can safely integrate Bank Statement Conversion through MCP, OpenAPI, and the REST API.
 
----
+The main Bank Statement Conversion application source remains in Azure DevOps. This GitHub repository is only for public agent-facing artifacts.
 
-## 🚀 What It Does
+## Install
 
-Whether you're processing statements for bookkeeping, importing into QuickBooks, or building a fintech platform, this tool makes PDF conversion simple and accurate.
+```bash
+npx skills add MTTenterprise/Bank-statement-conversion --skill bank-statement-conversion
+```
 
-✔️ Convert bank statements into:
-- **CSV** (clean & structured)
-- **Excel (XLSX)** 
-- **QuickBooks (QBO)**
-- **OFX** (Open Financial Exchange)
+After installing, restart your agent client if it requires a restart to load new skills.
 
-✔️ Supports:
-- **Scanned PDFs (OCR)**  
-- **Batch conversion**
-- **Drag & drop UI + REST API**
-- **Local or cloud deployments**
+## What This Skill Does
 
----
+The skill teaches agents how to:
 
-## 🧱 Tech Stack
+- Choose between remote MCP, OpenAPI, and REST API integration paths.
+- Use the public Bank Statement Conversion workflow.
+- Configure `BSC_API_TOKEN` safely.
+- Request only scoped token abilities.
+- Confirm before uploading financial documents or preparing downloads.
+- Avoid private or local-only endpoint assumptions.
 
-| Layer | Stack |
-|------|-------|
-| Backend | Laravel 11 (PHP 8.2) |
-| Frontend | Inertia.js + React |
-| Storage | Local & S3-compatible |
-| Docs | (Swagger UI) |
+## Repository Layout
 
----
+```text
+agent-skills/
+  bank-statement-conversion/
+    SKILL.md
+    agents/
+      openai.yaml
+    references/
+      public-workflow.md
+```
 
-## ⚙️ How to Use It
+## Public Endpoints
 
-### 🔹 Web Interface
+Use the public product and API URLs:
 
-Just drag & drop your PDF — get a download link in seconds.  
-No registration needed. One free conversion included.
+- Agent landing page: `https://bank-statement-conversion.com/agents`
+- API documentation: `https://bank-statement-conversion.com/api`
+- OpenAPI schema: `https://bank-statement-conversion.com/api/openapi.json`
+- LLM index: `https://bank-statement-conversion.com/llms.txt`
+- Expanded LLM context: `https://bank-statement-conversion.com/llms-full.txt`
+- Remote MCP endpoint: `https://bank-statement-conversion.com/mcp/bank-statement-conversion`
 
-[Try the demo →](https://bank-statement-conversion.com)
+## Agent Workflow
 
----
+The public conversion workflow is:
 
-### 🔹 API Access
+1. Optionally call `GET /api/user-status` to check credits, page allowance, and subscription plan.
+2. Upload files with `POST /api/upload`.
+3. Poll `GET /api/conversion-status/{jobId}` until the completed response includes a `download_token`.
+4. Download the converted file with `GET /api/download/{downloadToken}`.
 
-Convert statements in your backend workflow.
+Use `statement[]` for file uploads, include `document_type`, and choose a supported output `format`.
 
-```http
-POST /api/convert
+## Token Safety
+
+For every agent integration:
+
+- Create a dedicated dashboard API token.
+- Store it as `BSC_API_TOKEN` or another environment variable.
+- Do not paste tokens into prompts, source code, docs, screenshots, logs, or examples.
+- Enable only the abilities the agent needs:
+  - `account:status`
+  - `conversion:upload`
+  - `conversion:read`
+  - `conversion:download`
+- Confirm with the user before uploading bank statements, invoices, receipts, or other financial documents.
+- Confirm before preparing download links.
+- Revoke the token when agent access should stop.
+
+## MCP
+
+Use the remote MCP endpoint when your client supports remote MCP tools:
+
+```text
+https://bank-statement-conversion.com/mcp/bank-statement-conversion
+```
+
+Configure the dashboard token in the client environment as `BSC_API_TOKEN`.
+
+Remote MCP clients should send file bytes through the client-supported upload payload and ask the user for confirmation before sending financial documents.
+
+## OpenAPI And REST
+
+Use OpenAPI for ChatGPT Actions, custom GPTs, and schema-aware agents:
+
+```text
+https://bank-statement-conversion.com/api/openapi.json
+```
+
+Use REST for custom backends, scheduled jobs, and workflow engines:
+
+```text
+https://bank-statement-conversion.com/api
+```
+
+## Supported Formats
+
+Common input formats include PDF, JPG/JPEG, PNG, TIFF/TIF, CSV, XLS/XLSX, OFX, QBO, QFX, STA, MT940, MT940X, XML, and CAMT.053.
+
+Common bank statement output values include `csv`, `excel`, `json`, `qb_online`, `qb_desktop`, `xero`, `ofx`, `ofx_legacy`, `qfx`, `mt940`, `camt053`, `bai2`, `sage`, `myob`, `datev`, and `csv_clean`.
+
+## License
+
+Copyright MTTenterprise Inc.
