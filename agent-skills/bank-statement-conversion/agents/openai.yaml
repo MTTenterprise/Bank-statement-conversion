@@ -1,0 +1,14 @@
+interface:
+  display_name: "Bank Statement Conversion"
+  short_description: "Integrate agent-safe statement conversion"
+  brand_color: "#1D976C"
+  default_prompt: "Use $bank-statement-conversion to integrate secure bank statement conversion into this agent workflow."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "bank-statement-conversion"
+      description: "Remote MCP tools for account checks, uploads, conversion status, and downloads."
+      transport: "streamable_http"
+      url: "https://bank-statement-conversion.com/mcp/bank-statement-conversion"
+policy:
+  allow_implicit_invocation: true
